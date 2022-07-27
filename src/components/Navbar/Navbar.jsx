@@ -1,28 +1,38 @@
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { Typography, Box, Container, Button } from '@mui/material';
+import { Typography, Box, Container, IconButton, Badge } from '@mui/material';
+import { NavLink } from 'react-router-dom';
 import PaletteIcon from '@mui/icons-material/Palette';
-import { blueGrey } from '@mui/material/colors';
 import styled from '@emotion/styled';
 
 
-const Navbar = () => {
+const Navbar = ({totalCartItems}) => {
     return (
         <Wrapper>
             <Nav>
-                <Logo>
-                    <PaletteIcon fontSize='large'/>
-                    <Typography variant="h4" fontWeight={400}>Inks & Colors</Typography>
-                </Logo>
-                <CartBtn disableRipple={false} startIcon={<ShoppingCartIcon />} aria-label='Go to cart'>Cart</CartBtn>
+                <NavLinkStyle to="/">
+                    <Logo>
+                        <PaletteIcon fontSize='large'/>
+                        <Typography variant="h4" fontWeight={400}>Inks & Colors</Typography>
+                    </Logo>
+                </NavLinkStyle>
+                <NavLinkStyle to="/cart">
+                    <CartBtn disableRipple={true} disableTouchRipple={true} aria-label='Go to cart'>
+                        <Badge badgeContent={totalCartItems} color="primary">
+                            <ShoppingCartIcon fontSize='large'/>
+                        </Badge>
+                    </CartBtn>
+                </NavLinkStyle>
             </Nav>
         </Wrapper>
     )
 }
 
-const BtnBgColor = blueGrey;
+const NavLinkStyle =styled(NavLink)({
+    textDecoration: "none",
+});
 
-const Wrapper = styled(Container)`
-    padding-top: 1rem;
+const Wrapper = styled.div`
+    padding: 1rem 4rem 0 4rem;
 `;
 
 const Nav = styled.nav`
@@ -45,12 +55,10 @@ const Logo = styled(Box)`
     // border: 2px solid black;
 `;
 
-const CartBtn = styled(Button)({
-    backgroundColor: BtnBgColor[600],
+const CartBtn = styled(IconButton)({
       color: '#fff',
-      padding: '0.6rem 2rem',
+      borderRadius: '50%',
       '&:hover': {
-        backgroundColor: BtnBgColor[800],
         color: 'white',
     }
 });
