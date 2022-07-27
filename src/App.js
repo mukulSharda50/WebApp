@@ -1,25 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import {Navbar, ProductList, CartList} from './components';
+import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import styled from '@emotion/styled';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <NavWrapper>
+        <Navbar />
+      </NavWrapper>
+      <Router>
+        <Routes>
+          <Route path="/" element= {<ProductList />} />
+          <Route path="/cart" element= {<CartList />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
+const NavWrapper = styled.div`
+  background-color: #263238;
+`;
 
 export default App;
