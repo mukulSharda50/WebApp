@@ -14,13 +14,26 @@ function App() {
   }
   const fetchCart = async () => {
     const data = await commerce.cart.retrieve();
+    // console.log(data)
     setCart(data);
   }
   const HandleAddToCart = async (prodId, qty) => {
     const cartItem = await commerce.cart.add(prodId, qty);
-    console.log(cart)
-    setCart(cartItem.cart);
+    setCart(cartItem); // cartItem
+    // console.log(cartItem);
+    // console.log(cart.total_items);
   }
+  const HandleEmptyCart = async () => {
+    setCart(await commerce.cart.empty());
+    // console.log(cart)
+  }
+  const UpdateCartItemQty = async (prodId, qty) => { 
+    const cart = await commerce.cart.update(prodId, {quantity:qty});
+    // console.log(...cart.line_items, data)
+    // console.log(cart)
+    setCart(cart);
+  }
+
   useEffect(()=>{
     fetchProducts();
     fetchCart();
@@ -30,11 +43,19 @@ function App() {
     <div>
       <Router>
       <NavWrapper>
-        <Navbar />
+        <Navbar totalCartItems={cart?.total_items} />
       </NavWrapper>
         <Routes>
           <Route path="/" element= {<ProductList data={products} HandleAddToCart={HandleAddToCart}/>} />
-          <Route path="/cart" element= {<CartList />} />
+          <Route 
+            path="/cart" 
+            element= {
+              <CartList 
+              cart={cart}
+              HandleEmptyCart={HandleEmptyCart}
+              UpdateCart={UpdateCartItemQty}
+            />} 
+          />
         </Routes>
       </Router>
     </div>

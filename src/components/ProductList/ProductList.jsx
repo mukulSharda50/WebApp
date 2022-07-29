@@ -10,7 +10,14 @@ const ProductList = ({ data, HandleAddToCart })=>{
                     data.map(item => {
                         return (
                             <Grid key={item.id} item>
-                                <Product id={item.id} title={item.name} description={item.description} price={item.price.formatted_with_symbol} image={item.image.url} HandleAddtoCart={HandleAddToCart} />
+                                <Product 
+                                id={item.id} 
+                                title={item.name} 
+                                description={item.description} 
+                                price={item.price.formatted_with_symbol} 
+                                image={item.image.url} 
+                                HandleAddtoCart={HandleAddToCart} 
+                                />
                             </Grid>
                         );
                     })
