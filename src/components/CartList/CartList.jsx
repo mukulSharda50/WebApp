@@ -1,8 +1,8 @@
-import { Typography, Button, Box, Container, Stack } from '@mui/material';
+import { Typography, Button, Container, Stack } from '@mui/material';
 import styled from '@emotion/styled';
 import CartItem from './CartItem/CartItem';
-import { blue } from '@mui/material/colors';
-
+import Checkout from './Checkout/Checkout';
+import { NavLink } from 'react-router-dom';
 
 const CartList = ({ cart, HandleEmptyCart, UpdateCart }) => {
     return (
@@ -14,8 +14,6 @@ const CartList = ({ cart, HandleEmptyCart, UpdateCart }) => {
             {
                 cart?.total_items > 0 && 
                     cart?.line_items.map(item => {
-                        // console.log(item.name, item.price.formatted_with_symbol, item.quantity);
-                        // console.log(subTotal)
                         return (
                             <Wrapper key={item.id}>
                                 <CartItem 
@@ -32,7 +30,9 @@ const CartList = ({ cart, HandleEmptyCart, UpdateCart }) => {
                     <Typography variant="h4">Subtotal: {cart.subtotal?.formatted_with_symbol} </Typography>
                     <div>
                         <Button onClick={HandleEmptyCart} variant="outlined">Empty Cart</Button>
-                        <Button variant="contained" disableElevation={true}>Checkout</Button>
+                        <NavLink to='/checkout'>
+                            <Button variant="contained" disableElevation={true}>Checkout</Button>
+                        </NavLink>
                     </div>
                 </CartListFooter>
             }

@@ -1,4 +1,4 @@
-import {Navbar, ProductList, CartList} from './components';
+import {Navbar, ProductList, CartList, Checkout} from './components';
 import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import {commerce} from './lib/commerce';
 import styled from '@emotion/styled';
@@ -29,8 +29,6 @@ function App() {
   }
   const UpdateCartItemQty = async (prodId, qty) => { 
     const cart = await commerce.cart.update(prodId, {quantity:qty});
-    // console.log(...cart.line_items, data)
-    // console.log(cart)
     setCart(cart);
   }
 
@@ -56,6 +54,7 @@ function App() {
               UpdateCart={UpdateCartItemQty}
             />} 
           />
+          <Route path="/checkout" element={<Checkout />} />
         </Routes>
       </Router>
     </div>
