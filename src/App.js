@@ -54,7 +54,7 @@ function App() {
               UpdateCart={UpdateCartItemQty}
             />} 
           />
-          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/checkout" element={<Checkout cart={cart}/>} />
         </Routes>
       </Router>
     </div>

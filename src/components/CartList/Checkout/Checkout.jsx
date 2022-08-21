@@ -1,9 +1,9 @@
-import { Typography, Stepper, Step, StepLabel, Button, Container, Paper} from "@mui/material";
-import { useState } from "react";
+import { Typography, Stepper, Step, StepLabel, Button, Container, Paper, CircularProgress} from "@mui/material";
+import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
-
+import {commerce} from '../../../lib/commerce';
 
 const checkoutSteps = ["Add address details", "Payment details"];
 
@@ -12,15 +12,36 @@ const Confirmation = ()=>(
     <>Confirmation</>
 )
 
-const Checkout = () => {
+const Checkout = ({ cart }) => {
     const [active, setActive] = useState(0);
-
+    const [checkoutToken, setcheckoutToken] = useState(null);
+    const [checkoutTokenExpired, setcheckoutTokenExpired] = useState(false);
+    const [shippingData, setShippingData] = useState({});
+    
+    useEffect(()=>{
+        const generateToken = async ()=>{
+            try{
+                const token = await commerce.checkout.generateToken(cart.id, {type: 'cart'});
+                // console.log(token)
+                setcheckoutToken(token)
+            }catch (error){
+                setcheckoutTokenExpired(true);
+            }
+        }
+        generateToken()
+    }, [])
+    
+    function submitData(data){
+        setShippingData(data)
+        setActive((prev) => prev + 1);
+    }
+    console.log(shippingData);
     const Form = ()=>(
         <>
             {
                 active === 0 ? 
-                    <AddressForm /> :
-                    <PaymentForm />
+                   <AddressForm checkoutToken={checkoutToken} submitData={submitData}/> :
+                    <PaymentForm shippingData={shippingData} checkoutToken={checkoutToken} />
             }
         </>
     )
@@ -42,12 +63,9 @@ const Checkout = () => {
                 {
                     active === checkoutSteps.length ? 
                         < Confirmation /> :
-                        <Form />
+                        (checkoutToken ? <Form />: (checkoutTokenExpired ? <p>Error! Please try again</p>: <CircularProgress />))
                 }
-               <BtnWrapper>
-                    <Button  variant="outlined" onClick={() => setActive(active <= 0 ? 0 : active - 1)}>Back</Button>
-                    <Button variant="outlined" onClick={() => setActive(active + 1)}>Next</Button>
-               </BtnWrapper>
+               
             </FormWrapper>
         </Wrapper>
         </Container>
@@ -71,17 +89,5 @@ const FormWrapper = styled.div({
     // width: '100%',
     minHeight: '30vh',
     // border: '2px solid red'
-});
-
-const BtnWrapper = styled.div ({
-    width: '95%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: '5rem',
-    // marginLeft: '10rem'
-    // padding: '0 2rem',
-    // margin: '2rem 1rem',
-    // border: '2px solid black'
 });
 export default Checkout;
